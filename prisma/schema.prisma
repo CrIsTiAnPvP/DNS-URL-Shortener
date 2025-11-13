@@ -22,10 +22,12 @@ model User {
   createdAt DateTime @default(now())
 }
 
-model URL {
+model url {
   id        String   @id @default(auto()) @map("_id") @db.ObjectId
   original  String
   short     String   @unique
   userId    String   @db.ObjectId
   createdAt DateTime @default(now())
+  expiresAt DateTime?
+  dnsRecordID String  @unique
 }

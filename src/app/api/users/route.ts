@@ -1,24 +1,25 @@
-import { NextApiRequest, NextApiResponse } from "next";
-import { getSession } from "@/lib/auth";
-import { PrismaClient } from "#/prisma/client";
-import { hash } from "bcrypt"
+import { NextRequest, NextResponse } from "next/server";
+import { getSession } from "@/lib/session";
+import prisma from "@/lib/prisma";
+import { hash } from "bcrypt";
 
-const prisma = new PrismaClient()
-
-export async function GET(res: NextApiResponse){
+export async function GET(){
 	const session = await getSession();
 	if (!session) {
-		res.status(403).json({ message: "No session Found" })
+		return NextResponse.json({ message: "No session Found" }, { status: 403 });
 	} else {
-		return res.status(200).json({ message: "Authorized", session})
+		return NextResponse.json({ message: "Authorized", session}, { status: 200 });
 	}
 }
 
-export async function POST(req: NextApiRequest, res: NextApiResponse){
-	const { username, email, password } = req.body
+export async function POST(req: NextRequest){
+	const data = await req.json();
+	const { username, email, password } = data;
+
+	console.log(data)
 
 	if (!username || !email || !password ){
-		return res.status(404).json({ message: "Missing fields" })
+		return NextResponse.json({ message: "Missing fields" }, { status: 404 });
 	}
 
 	const pwd = await hash(password, 10)
@@ -30,7 +31,7 @@ export async function POST(req: NextApiRequest, res: NextApiResponse){
 	})
 
 	if (eUser) {
-		return res.status(404).json({ message: "User already exists" })
+		return NextResponse.json({ message: "User already exists" }, { status: 409 });
 	} else {
 		const user = await prisma.user.create({
 			data: {
@@ -40,7 +41,7 @@ export async function POST(req: NextApiRequest, res: NextApiResponse){
 			}
 		})
 
-		return res.status(200).json({ message: "User created succesfully", userId: user.id })
+		return NextResponse.json({ message: "User created succesfully", userId: user.id }, { status: 200 });
 	}
 
 }

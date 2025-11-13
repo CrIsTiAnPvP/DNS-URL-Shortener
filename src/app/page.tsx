@@ -1,13 +1,14 @@
 import Nav from "@/components/nav";
+import { getSession } from "@/lib/session";
 
-export default function Home() {
+export default async function Home() {
 
-  const session = undefined
+  const session = await getSession();
 
   return (
-    <div className="min-h-screen w-full bg-white dark:bg-linear-to-r from-cyan-700/80 to-indigo-600/90">
-      <Nav session={session}/>
-      <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-linear-to-r from-cyan-900 to-indigo-700">
+    <div className="min-h-screen w-full bg-linear-to-r from-cyan-700/80 to-indigo-600/90">
+      <Nav session={session} showUser={true}/>
+      <div className="flex min-h-screen items-center justify-center font-sans bg-linear-to-r from-cyan-900 to-indigo-700">
       </div>
     </div>
   );
