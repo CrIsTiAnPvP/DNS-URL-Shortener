@@ -1,8 +1,8 @@
 import prisma from "@/lib/prisma";
 import client from "@/lib/cloudflare";
-import { NextRequest, NextResponse } from "next/server";
+import { NextResponse } from "next/server";
 
-export async function GET(req: NextRequest){
+export async function DELETE(){
 	const expiredDns = await prisma.url.findMany({ where: { expiresAt: { lt: new Date() } } });
 
 	for (let l of expiredDns){

@@ -11,25 +11,6 @@ export default async function Register(){
 		redirect('/');
 	}
 
-	async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
-		e.preventDefault();
-		const form = e.currentTarget;
-		const formData = new FormData(form);
-		const data = {
-			email: formData.get("email"),
-			username: formData.get("username"),
-			password: formData.get("password"),
-		};
-		
-		await fetch("/api/users", {
-			method: "POST",
-			headers: {
-				"Content-Type": "application/json",
-			},
-			body: JSON.stringify(data),
-		});
-	}
-
 	return (
 		<div>
 			<div className="w-full bg-linear-to-r from-cyan-700/80 to-indigo-600/90">

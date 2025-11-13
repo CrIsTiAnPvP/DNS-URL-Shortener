@@ -57,9 +57,10 @@ export default function RegisterForm() {
           try { loginJson = await loginRes.json(); } catch {}
 
           if (loginRes.ok) {
-            // redirect to home
+            // redirect to home after a short pause and keep history clean
             form.reset();
-            router.push('/');
+            await new Promise((r) => setTimeout(r, 800));
+            router.replace('/');
             return;
           } else {
             setMessage(loginJson?.message ?? 'Login failed');

@@ -8,10 +8,14 @@ export async function POST(req:NextRequest){
 	var { url, userId } = await req.json();
 
 	if (!userId) {
-		userId = 99999
+		userId = "UnPutoFrikiSinCuenta";
 	}
 
-	const cif = (await hash(url, 10)).slice(0, randomInt(10))
+	const _hash = await hash(url, 10);
+	const n = randomInt(1, 15);
+	const cif = _hash.slice(-n).split('').reverse().join('');
+
+	console.log(cif, url)
 
 	const record = await client.dns.records.create({
 		zone_id: process.env.CF_ZONE ? process.env.CF_ZONE : "",
@@ -32,5 +36,5 @@ export async function POST(req:NextRequest){
 		}
 	})
 
-	return NextResponse.json({ message: "DNS Record created sucessfully" }, { status: 200 });
+	return NextResponse.json({ message: "DNS Record created sucessfully", cif }, { status: 200 });
 }
